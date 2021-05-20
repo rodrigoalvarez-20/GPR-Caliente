@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gprcaliente.views;
+package views;
 
 /**
  *
@@ -34,7 +34,7 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         javax.swing.GroupLayout tbInventarioLayout = new javax.swing.GroupLayout(tbInventario);
         tbInventario.setLayout(tbInventarioLayout);
