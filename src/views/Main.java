@@ -5,19 +5,69 @@
  */
 package views;
 
+import controllers.ItemController;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableModel;
+import models.Item;
+import utils.MySQLConn;
+
 /**
  *
  * @author rodri
  */
 public class Main extends javax.swing.JFrame {
-
+    private Connection cnx = null;
+    private ArrayList<Item> inventoryData = new ArrayList();
+    private String[] headers = new String[]{"ID", "Nombre", "Categoria", "Precio", "Stock"};
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
+        this.tbInv.setDefaultEditor(Object.class, null);
+        setData();
+        setListener();
+    }
+    
+    private void setData(){
+        try {
+            cnx = MySQLConn.getConn();
+            System.out.println("Conexion establecida");
+            inventoryData = new ItemController().getListItems(cnx, "");
+            DefaultTableModel model = new DefaultTableModel();
+            
+            model.setColumnIdentifiers(headers);
+            this.tbInv.setModel(model);
+            
+            for(Item item : inventoryData){
+                String categoria = item.getCategoria().substring(0,1).toUpperCase() + item.getCategoria().substring(1);
+                model.addRow(new Object[]{ item.getId(), item.getNombre(), categoria, item.getPrecio(), item.getStock() } );
+            }
+            
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(rootPane, "Ha ocurrido un error al conectar con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
+    private void setListener(){
+        this.tbInv.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            Item itemSelected = inventoryData.get(tbInv.getSelectedRow());
+            this.txtID.setText(String.valueOf(itemSelected.getId()));
+            this.txtName.setText(itemSelected.getNombre());
+            this.txtPrice.setText(String.valueOf(itemSelected.getPrecio()));
+            this.txtStock.setText(String.valueOf(itemSelected.getStock()));
+            String categoria = itemSelected.getCategoria().substring(0,1).toUpperCase() + itemSelected.getCategoria().substring(1);
+            this.cbType.setSelectedItem(categoria);
+            this.btnUpdate.setEnabled(true);
+            this.btnDelete.setEnabled(true);
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,6 +79,25 @@ public class Main extends javax.swing.JFrame {
 
         mainTab = new javax.swing.JTabbedPane();
         tbInventario = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbInv = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        txtID = new javax.swing.JTextField();
+        txtName = new javax.swing.JTextField();
+        txtStock = new javax.swing.JTextField();
+        txtPrice = new javax.swing.JTextField();
+        cbType = new javax.swing.JComboBox<>();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        cbTypeFilter = new javax.swing.JComboBox<>();
+        btnFilter = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         tbInsumos = new javax.swing.JPanel();
         tbMercancia = new javax.swing.JPanel();
 
@@ -36,18 +105,143 @@ public class Main extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
+        tbInv.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbInv.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tbInv);
+
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel1.setText("Item Seleccionado");
+
+        txtID.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        txtName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        txtStock.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        txtPrice.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        cbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Insumos", "Mercancias" }));
+
+        btnAdd.setText("Añadir");
+
+        btnUpdate.setText("Actualizar");
+        btnUpdate.setEnabled(false);
+        btnUpdate.setPreferredSize(new java.awt.Dimension(98, 29));
+
+        jLabel2.setText("ID:");
+
+        jLabel3.setText("Nombre:");
+
+        jLabel4.setText("Categoria:");
+
+        jLabel5.setText("Precio:");
+
+        jLabel6.setText("Stock:");
+
+        jLabel7.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel7.setText("Filtrar items");
+
+        cbTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Insumos", "Mercancias" }));
+
+        btnFilter.setText("Aplicar");
+
+        btnDelete.setActionCommand("");
+        btnDelete.setEnabled(false);
+        btnDelete.setLabel("Eliminar");
+        btnDelete.setPreferredSize(new java.awt.Dimension(98, 29));
+
         javax.swing.GroupLayout tbInventarioLayout = new javax.swing.GroupLayout(tbInventario);
         tbInventario.setLayout(tbInventarioLayout);
         tbInventarioLayout.setHorizontalGroup(
             tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 840, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+            .addGroup(tbInventarioLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tbInventarioLayout.createSequentialGroup()
+                        .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tbInventarioLayout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addGroup(tbInventarioLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(54, 54, 54)
+                                .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tbInventarioLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(tbInventarioLayout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(34, 34, 34)))
+                        .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbType, 0, 1, Short.MAX_VALUE)
+                            .addComponent(txtPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tbInventarioLayout.createSequentialGroup()
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(12, Short.MAX_VALUE))
+                    .addGroup(tbInventarioLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbTypeFilter, 0, 1, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(515, 515, 515))))
         );
         tbInventarioLayout.setVerticalGroup(
             tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
+            .addGroup(tbInventarioLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbTypeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFilter))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(cbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel6)
+                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(tbInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6))
         );
 
-        mainTab.addTab("tab1", tbInventario);
+        mainTab.addTab("Inventario", tbInventario);
 
         javax.swing.GroupLayout tbInsumosLayout = new javax.swing.GroupLayout(tbInsumos);
         tbInsumos.setLayout(tbInsumosLayout);
@@ -57,10 +251,10 @@ public class Main extends javax.swing.JFrame {
         );
         tbInsumosLayout.setVerticalGroup(
             tbInsumosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
+            .addGap(0, 512, Short.MAX_VALUE)
         );
 
-        mainTab.addTab("tab2", tbInsumos);
+        mainTab.addTab("Consumibles", tbInsumos);
 
         javax.swing.GroupLayout tbMercanciaLayout = new javax.swing.GroupLayout(tbMercancia);
         tbMercancia.setLayout(tbMercanciaLayout);
@@ -70,10 +264,10 @@ public class Main extends javax.swing.JFrame {
         );
         tbMercanciaLayout.setVerticalGroup(
             tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
+            .addGap(0, 512, Short.MAX_VALUE)
         );
 
-        mainTab.addTab("tab3", tbMercancia);
+        mainTab.addTab("Mercancia", tbMercancia);
 
         getContentPane().add(mainTab);
 
@@ -116,9 +310,28 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnFilter;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cbType;
+    private javax.swing.JComboBox<String> cbTypeFilter;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane mainTab;
     private javax.swing.JPanel tbInsumos;
+    private javax.swing.JTable tbInv;
     private javax.swing.JPanel tbInventario;
     private javax.swing.JPanel tbMercancia;
+    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtPrice;
+    private javax.swing.JTextField txtStock;
     // End of variables declaration//GEN-END:variables
 }
