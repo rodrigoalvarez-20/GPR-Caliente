@@ -13,9 +13,9 @@ public class SaleController {
             PreparedStatement consulta;
             consulta = !type.isEmpty() ? 
                     cnx.prepareStatement("SELECT " + this.INV_TABLE + ".*, " + this.TABLE_NAME + ".cantidad, " + this.TABLE_NAME + ".total, " + this.TABLE_NAME + ".fecha FROM " + 
-                    this.TABLE_NAME + " INNER JOIN " + this.TABLE_NAME + " on " + this.TABLE_NAME + ".id_item = " + this.INV_TABLE + ".id WHERE categoria = ?") : 
+                    this.TABLE_NAME + " INNER JOIN " + this.INV_TABLE + " on " + this.TABLE_NAME + ".id_item = " + this.INV_TABLE + ".id WHERE categoria = ?") : 
                     cnx.prepareStatement("SELECT " + this.INV_TABLE + ".*, " + this.TABLE_NAME + ".cantidad, " + this.TABLE_NAME + ".total, " + this.TABLE_NAME + ".fecha FROM " + 
-                    this.TABLE_NAME + " INNER JOIN " + this.TABLE_NAME + " on " + this.TABLE_NAME + ".id_item = " + this.INV_TABLE + ".id");
+                    this.TABLE_NAME + " INNER JOIN " + this.INV_TABLE + " on " + this.TABLE_NAME + ".id_item = " + this.INV_TABLE + ".id");
             if(!type.isEmpty()){
                 consulta.setString(1, type);
             }
