@@ -25,68 +25,8 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
-//        this.tbInv.setDefaultEditor(Object.class, null);
-//        setDataForInventory("");
-//        setItemsOfMercSale();
-//        setItemsOfConsSale();
         this.setLocationRelativeTo(null);
     }
-    
-
-//    private void setItemsOfMercSale(){
-//        try {
-//            cnx = MySQLConn.getConn();
-//            mercItemsData = new ItemController().getListItems(cnx, "mercancias");
-//            this.cbItemMerc.removeAllItems();
-//            for(Item mercItem : mercItemsData){
-//                this.cbItemMerc.addItem(mercItem.getNombre());
-//            }
-//            mercData = new SaleController().getAllSales(cnx, "mercancias");
-//
-//            DefaultTableModel model = new DefaultTableModel();
-//
-//            model.setColumnIdentifiers(saleHeaders);
-//
-//            this.tbSaleMerc.setModel(model);
-//
-//            for(Sale sl : mercData){
-//                String categoria = sl.getCategoria().substring(0,1).toUpperCase() + sl.getCategoria().substring(1);
-//                model.addRow(new Object[]{ sl.getId(), sl.getNombre(), categoria, sl.getPrecio(), sl.getCantidad(), sl.getTotal(), sl.getFecha() } );
-//            }
-//            
-//        }catch (ClassNotFoundException | SQLException ex) {
-//            System.out.println(ex.getMessage());
-//            JOptionPane.showMessageDialog(rootPane, "Ha ocurrido un error al conectar con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-    
-//    private void setItemsOfConsSale(){
-//        try {
-//            cnx = MySQLConn.getConn();
-//            consItemsData = new ItemController().getListItems(cnx, "insumos");
-//            this.cbItemCons.removeAllItems();
-//            for(Item consItem : consItemsData){
-//                this.cbItemCons.addItem(consItem.getNombre());
-//            }
-//            consData = new SaleController().getAllSales(cnx, "insumos");
-//
-//            DefaultTableModel model = new DefaultTableModel();
-//
-//            model.setColumnIdentifiers(saleHeaders);
-//
-//            this.tbSaleCons.setModel(model);
-//
-//            for(Sale sl : consData){
-//                String categoria = sl.getCategoria().substring(0,1).toUpperCase() + sl.getCategoria().substring(1);
-//                model.addRow(new Object[]{ sl.getId(), sl.getNombre(), categoria, sl.getPrecio(), sl.getCantidad(), sl.getTotal(), sl.getFecha() } );
-//            }
-//            
-//        }catch (ClassNotFoundException | SQLException ex) {
-//            System.out.println(ex.getMessage());
-//            JOptionPane.showMessageDialog(rootPane, "Ha ocurrido un error al conectar con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-//    
     
     /**
      * This method is called from within the constructor to initialize the form.

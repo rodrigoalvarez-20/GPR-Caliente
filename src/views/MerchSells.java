@@ -1,10 +1,12 @@
 package views;
 
+import controllers.ItemController;
 import controllers.SaleController;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import models.Item;
 import models.Sale;
 import utils.MySQLConn;
@@ -19,8 +21,9 @@ public class MerchSells extends javax.swing.JFrame {
      * Creates new form MerchSells
      */
     public MerchSells() {
-        setItemsOfMercSale();
         initComponents();
+        setItemsOfMercSale();
+        this.setLocationRelativeTo(null);
     }
 
     private void setItemsOfMercSale(){
@@ -59,7 +62,6 @@ public class MerchSells extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tbMercancia = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         cbItemMerc = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
@@ -70,19 +72,27 @@ public class MerchSells extends javax.swing.JFrame {
         tbSaleMerc = new javax.swing.JTable();
         btnBuy = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel11.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("Selecciona un item:");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-        jLabel12.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        getContentPane().add(cbItemMerc, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 220, -1));
+
+        jLabel12.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Cantidad solicitada:");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, -1, -1));
 
         txtCantMerc.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        getContentPane().add(txtCantMerc, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, 230, -1));
 
         btnReload.setText("Refrescar");
         btnReload.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -90,9 +100,12 @@ public class MerchSells extends javax.swing.JFrame {
                 btnReloadMouseClicked(evt);
             }
         });
+        getContentPane().add(btnReload, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 60, -1, -1));
 
-        jLabel13.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Registro de ventas de mercancias");
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
 
         tbSaleMerc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -107,7 +120,15 @@ public class MerchSells extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tbSaleMerc);
 
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 840, 410));
+
         btnBuy.setText("Comprar");
+        btnBuy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBuyMouseClicked(evt);
+            }
+        });
+        getContentPane().add(btnBuy, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 60, -1, -1));
 
         btnBack.setText("Regresar");
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -115,62 +136,21 @@ public class MerchSells extends javax.swing.JFrame {
                 btnBackMouseClicked(evt);
             }
         });
+        getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 60, -1, -1));
 
-        javax.swing.GroupLayout tbMercanciaLayout = new javax.swing.GroupLayout(tbMercancia);
-        tbMercancia.setLayout(tbMercanciaLayout);
-        tbMercanciaLayout.setHorizontalGroup(
-            tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tbMercanciaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tbMercanciaLayout.createSequentialGroup()
-                        .addGroup(tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(cbItemMerc, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                            .addComponent(txtCantMerc))
-                        .addGap(28, 28, 28)
-                        .addComponent(btnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnReload, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89))
-                    .addGroup(tbMercanciaLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tbMercanciaLayout.createSequentialGroup()
-                        .addComponent(jScrollPane3)
-                        .addContainerGap())))
-        );
-        tbMercanciaLayout.setVerticalGroup(
-            tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tbMercanciaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(tbMercanciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbItemMerc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCantMerc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuy)
-                    .addComponent(btnReload)
-                    .addComponent(btnBack))
-                .addGap(15, 15, 15)
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        getContentPane().add(tbMercancia, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 860, 560));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/bg_3.jpeg"))); // NOI18N
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 880, 580));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnReloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReloadMouseClicked
+    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
+        this.setVisible(false);
+        new Inventory().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnBackMouseClicked
+
+    private void btnBuyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuyMouseClicked
         if(!this.txtCantMerc.getText().isEmpty()){
             Item selectedItemForSale = mercItemsData.get(this.cbItemMerc.getSelectedIndex());
             int cant = Integer.parseInt(this.txtCantMerc.getText());
@@ -193,13 +173,11 @@ public class MerchSells extends javax.swing.JFrame {
         }else {
             JOptionPane.showMessageDialog(this, "La cantidad ingresada es invalidad", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_btnReloadMouseClicked
+    }//GEN-LAST:event_btnBuyMouseClicked
 
-    private void btnBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBackMouseClicked
-        this.setVisible(false);
-        new Inventory().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_btnBackMouseClicked
+    private void btnReloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReloadMouseClicked
+        setItemsOfMercSale();
+    }//GEN-LAST:event_btnReloadMouseClicked
 
     /**
      * @param args the command line arguments
@@ -244,8 +222,8 @@ public class MerchSells extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JPanel tbMercancia;
     private javax.swing.JTable tbSaleMerc;
     private javax.swing.JTextField txtCantMerc;
     // End of variables declaration//GEN-END:variables

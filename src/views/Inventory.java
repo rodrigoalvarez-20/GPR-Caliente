@@ -2,6 +2,7 @@ package views;
 
 import controllers.ItemController;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -119,6 +120,11 @@ public class Inventory extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, -1, 24));
 
         btnToMerch.setText("Venta de mercancias");
+        btnToMerch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnToMerchMouseClicked(evt);
+            }
+        });
         getContentPane().add(btnToMerch, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 420, -1, -1));
 
         tbInv.setModel(new javax.swing.table.DefaultTableModel(
@@ -143,6 +149,11 @@ public class Inventory extends javax.swing.JFrame {
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, -1, 24));
 
         btnToIns.setText("Venta de insumos");
+        btnToIns.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnToInsMouseClicked(evt);
+            }
+        });
         getContentPane().add(btnToIns, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 420, -1, -1));
 
         cbTypeFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Insumos", "Mercancias" }));
@@ -271,7 +282,6 @@ public class Inventory extends javax.swing.JFrame {
         try {
             int hasExecuted = new ItemController().delete(cnx, selectedItem);
             if(hasExecuted > 0){
-                //this.tbInv.getModel().addTableModelListener(null);
                 JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente el item", "Correcto", JOptionPane.INFORMATION_MESSAGE);
             }else {
                 JOptionPane.showMessageDialog(rootPane, "Ha ocurrido un error al eliminar el item", "Error", JOptionPane.ERROR_MESSAGE);
@@ -280,8 +290,6 @@ public class Inventory extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Ha ocurrido un error con la sentencia SQL", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }finally {
             setDataForInventory("");
-            setItemsOfMercSale();
-            setItemsOfConsSale();
         }
     }//GEN-LAST:event_btnDeleteMouseClicked
 
@@ -299,13 +307,23 @@ public class Inventory extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Ha ocurrido un error con la sentencia SQL", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }finally {
                 setDataForInventory("");
-                setItemsOfMercSale();
-                setItemsOfConsSale();
             }
         }else {
             JOptionPane.showMessageDialog(rootPane, "Los campos no pueden quedar vacios", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateMouseClicked
+
+    private void btnToMerchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnToMerchMouseClicked
+        this.setVisible(false);
+        new MerchSells().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnToMerchMouseClicked
+
+    private void btnToInsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnToInsMouseClicked
+        this.setVisible(false);
+        new InsSells().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnToInsMouseClicked
 
     /**
      * @param args the command line arguments
